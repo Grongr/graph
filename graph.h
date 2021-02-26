@@ -1,0 +1,5 @@
+#ifndef PROJ_GRAPH_LIB_GRAPH_H
+#define PROJ_GRAPH_LIB_GRAPH_H
+
+
+#endif //PROJ_GRAPH_LIB_GRAPH_H
