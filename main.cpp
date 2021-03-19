@@ -1,4 +1,3 @@
-#include <iostream>
 #include "graph.h"
 
 int main() {

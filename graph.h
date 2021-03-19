@@ -4,10 +4,6 @@
 #include <iostream>
 #include <vector>
 
-#define container   std::vector<Edge>
-#define v_container std::vector<Vertex>
-#define id_type     int
-
 /*!
  * Namespace in which all library is defined
  */
@@ -15,27 +11,29 @@ namespace grl {
 
     /*!
      * Struct which is the edge of the graph
+     * @tparam id_type  name says all you need to know
      */
+    template<typename id_type>
     struct Edge {
         /*!
          * @param weight    weight of this edge
          * @param child_id  id of vertex in which it goes
          */
-        double weight;
-        id_type    child_id;
+        double  weight;
+        id_type childId;
 
         /*!
          * Constructor with all params
          * @param weight
-         * @param child_id
+         * @param childId
          */
-        Edge(double weight, id_type child_id): weight(weight), child_id(child_id) {}
+        Edge(double weight, id_type childId): weight(weight), childId(childId) {}
 
         /*!
          * Constructor with only child_id param
          * @param child_id
          */
-        Edge(id_type child_id): Edge(0, child_id) {}
+        Edge(id_type childId): Edge(0, childId) {}
 
         /*!
          * Default constructor
@@ -45,21 +43,23 @@ namespace grl {
 
     /*!
      * Struct which contains all the information about one Vertex
+     * @tparam id_type  name says all you need to know
      */
+    template<typename id_type>
     struct Vertex {
 
         /*!
          * Id of this Vertex and array of eds
          */
         id_type id;
-        container eds;
+        std::vector<Edge<id_type>> eds;
 
         /*!
          * Constructor with params
          * @param id
          * @param eds
          */
-        Vertex(id_type id, container& eds): id(id), eds(eds){}
+        Vertex(id_type id, std::vector<Edge<id_type>>& eds): id(id), eds(eds){}
 
         /*!
          * Default Constructor
@@ -68,9 +68,17 @@ namespace grl {
         Vertex(id_type id): id(id), eds(0) {}
 
         /*!
+         * Destructor. Deletes vector of Edges
+         */
+        ~Vertex() {
+            delete [] this->eds;
+            // TODO to read about concepts in 20cpp and do something with delete
+        }
+
+        /*!
          * Operator of input It will read Vertex in this order:
          *  1) id param
-         *  2) integer number if int variables
+         *  2) integer number if id_type variables
          *     which are id's of vertexes in which edges comes from this
          * @param in     input stream
          * @param ver    vertex in which input comes
@@ -89,8 +97,11 @@ namespace grl {
     };
 
     /*!
-     * Graph class!!!
+     * This is a graph class!!!
+     * @tparam id_type      name says all you need to know
+     * @tparam user_data    user data class. interface for this class you may find in user_data.h file
      */
+    template<typename id_type, typename user_data>
     class Graph {
     public:
         /*!
@@ -107,6 +118,7 @@ namespace grl {
          * @return      input stream
          */
         friend std::istream& operator>>(std::istream &in, Graph &g);
+        // TODO operator >> for ifstream and istream different or standard
 
         /*!
          * Outs Graph in out stream in order
@@ -117,7 +129,8 @@ namespace grl {
          */
         friend std::ostream& operator<<(std::ostream &out, const Graph &g);
     private:
-        v_container vertexes;
+        std::vector<Vertex<id_type>> vertexes;
+        user_data userData;
     };
 }
 
